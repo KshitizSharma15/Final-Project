@@ -1,0 +1,150 @@
+<div class="flex items-center justify-center min-h-screen overflow-hidden">
+    <div class="flex flex-col items-center justify-center">
+      <div *ngIf="!leaveCreated; else successMessage">
+        <div
+          class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20"
+          style="border-radius: 53px"
+        >
+          <div class="text-center mb-8 w-full">
+            <div
+              class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4 w-full"
+            >
+              {{ !loading ? "Enter Leave Details" : "Processing" }}
+            </div>
+            <span class="text-muted-color font-medium">{{
+              !loading ? "Request for shift" : "in progress.."
+            }}</span>
+          </div>
+  
+          <form
+            [formGroup]="form"
+            (ngSubmit)="onSubmit(form.value)"
+            #regiterForm="ngForm"
+            class="flex flex-col justify-center items-center gap-2 w-full"
+            *ngIf="!loading; else spinner"
+          >
+            <p-fluid>
+              <div class="flex gap-2 mx-auto w-full items-center">
+                <label
+                  for="employeeID"
+                  class="text-xl font-serif text-surface-900 dark:text-surface-0"
+                  >Employee ID:</label
+                >
+                <div class="flex flex-col gap-2 w-full">
+                  <input
+                    id="employeeID"
+                    type="text"
+                    pInputText
+                    formControlName="employeeID"
+                    pSize="large"
+                    [readOnly]="true"
+                  />
+                  <small
+                    class="text-red-600"
+                    id="username-help"
+                    *ngIf="form.get('employeeID')?.invalid && form.get('employeeID')?.touched"
+                    >{{ employeeIDErrorMessage }}</small
+                  >
+                </div>
+              </div>
+              <div class="flex gap-2 mx-auto w-full items-center">
+                <label
+                  for="leaveType"
+                  class="text-xl font-serif text-surface-900 dark:text-surface-0"
+                  >Leave Type:</label
+                >
+                <div class="flex flex-col gap-2 w-full">
+                  <p-select
+                    id="leaveType"
+                    formControlName="leaveType"
+                    pSize="large"
+                    class="w-full"
+                    [options]="leaveTypes"
+                    placeholder="Select Leave Type"
+                  />
+                  <small
+                    class="text-red-600"
+                    id="username-help"
+                    *ngIf="form.get('leaveType')?.invalid && form.get('leaveType')?.touched"
+                    >{{ leaveTypeErrorMessage }}</small
+                  >
+                </div>
+              </div>
+              <div class="flex gap-2 mx-auto w-full items-center">
+                <label
+                  for="startDate"
+                  class="text-xl font-serif text-surface-900 dark:text-surface-0"
+                  >Start Date:</label
+                >
+                <div class="flex flex-col gap-2 w-full">
+                  <p-datepicker
+                    formControlName="startDate"
+                    class="w-full"
+                    [minDate]="minStartDate"
+                  ></p-datepicker>
+                  <small
+                    class="text-red-600"
+                    id="startDate"
+                    *ngIf="form.get('startDate')?.invalid && form.get('startDate')?.touched"
+                    >{{ startDateErrorMessage }}</small
+                  >
+                </div>
+              </div>
+              <div class="flex gap-2 mx-auto w-full items-center">
+                <label
+                  for="endDate"
+                  class="text-xl font-serif text-surface-900 dark:text-surface-0"
+                  >End Date:</label
+                >
+                <div class="flex flex-col gap-2 w-full">
+                  <p-datepicker
+                    formControlName="endDate"
+                    class="w-full"
+                    [minDate]="minEndDate"
+                  ></p-datepicker>
+                  <small
+                    class="text-red-600"
+                    id="endDate"
+                    *ngIf="form.get('endDate')?.invalid && form.get('endDate')?.touched"
+                    >{{ endDateErrorMessage }}</small
+                  >
+                </div>
+              </div>
+              <div class="flex gap-2 mx-auto my-6 items-center">
+                <p-button
+                  size="large"
+                  label="Submit"
+                  [raised]="true"
+                  severity="success"
+                  [disabled]="form.invalid"
+                  icon="pi pi-check"
+                  type="submit"
+                ></p-button>
+                <p-button
+                  size="large"
+                  label="Cancel"
+                  (click)="onCancel()"
+                  [raised]="true"
+                  severity="danger"
+                  icon="pi pi-times"
+                  *ngIf="!loading"
+                ></p-button>
+              </div>
+            </p-fluid>
+          </form>
+          <ng-template #spinner>
+            <div class="mx-auto w-fit">
+              <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #successMessage>
+    <div class="mx-auto w-fit">
+      <div class="text-green-500 text-3xl font-medium mb-4">
+        Leave Request Raised !!
+      </div>
+    </div>
+  </ng-template>

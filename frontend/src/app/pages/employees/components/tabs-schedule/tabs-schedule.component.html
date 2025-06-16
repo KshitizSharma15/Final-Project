@@ -1,0 +1,14 @@
+<p-fluid>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-schedule-cards 
+            [title]="'My Schedule'" 
+            [caption]="'Your upcoming shifts for next 7 days.'"
+            [UpcomingShifts]="UpcomingShifts">
+        </app-schedule-cards>
+        <app-schedule-cards 
+            [title]="'Recent Activity'" 
+            [caption]="'Latest Updates and notifications.'"
+            [PreviousAttendances]="PreviousAttendances">
+        </app-schedule-cards>
+    </div>
+</p-fluid>

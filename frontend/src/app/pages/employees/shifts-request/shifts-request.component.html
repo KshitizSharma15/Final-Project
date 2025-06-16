@@ -1,0 +1,169 @@
+<div class="flex items-center justify-center overflow-hidden">
+  <div class="flex flex-col items-center justify-center">
+    <div class="grid grid-cols-2 gap-4" *ngIf="!shiftCreated; else successMessage">
+      <div
+        class="w-full bg-surface-0 dark:bg-surface-900 py-10 px-8 sm:px-20"
+        style="border-radius: 53px"
+      >
+        <div class="text-center mb-8 w-full">
+          <div
+            class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4 w-full"
+          >
+            {{ !loading ? "Enter Shift Details" : "Processing" }}
+          </div>
+          <span class="text-muted-color font-medium">{{
+            !loading ? "Request for shift" : "in progress.."
+          }}</span>
+        </div>
+
+        <form
+          [formGroup]="form"
+          (ngSubmit)="onSubmit(form.value)"
+          #regiterForm="ngForm"
+          class="flex flex-col justify-center items-center gap-2 w-full"
+          *ngIf="!loading; else spinner"
+        >
+          <p-fluid class="flex flex-col gap-4 w-full">
+            <div class="flex justify-between mx-auto w-full items-center">
+              <label
+                for="employeeID"
+                class="text-xl font-serif text-surface-900 dark:text-surface-0"
+                >ID:</label
+              >
+              <div class="flex flex-col gap-2 w-48">
+                <input
+                  id="employeeID"
+                  type="text"
+                  pInputText
+                  formControlName="employeeID"
+                  pSize="large"
+                  [readOnly]="true"
+                />
+                <small
+                  class="text-red-600"
+                  id="username-help"
+                  *ngIf="
+                    form.get('employeeID')?.invalid &&
+                    form.get('employeeID')?.touched
+                  "
+                  >{{ employeeIDErrorMessage }}</small
+                >
+              </div>
+            </div>
+            <div class="flex justify-between mx-auto w-full items-center">
+              <label
+                for="shiftDate"
+                class="text-xl font-serif text-surface-900 dark:text-surface-0"
+                >Date:</label
+              >
+              <div class="flex flex-col gap-2 w-48">
+                <p-datepicker
+                  formControlName="shiftDate"
+                  class="w-full"
+                  [minDate]="minDate"
+                />
+                <small
+                  class="text-red-600"
+                  id="shiftDate"
+                  *ngIf="
+                    form.get('shiftDate')?.invalid &&
+                    form.get('shiftDate')?.touched
+                  "
+                  >{{ shiftDateErrorMessage }}</small
+                >
+              </div>
+            </div>
+            <div class="flex justify-between mx-auto w-full items-center">
+              <label
+                for="shiftTime"
+                class="text-xl font-serif text-surface-900 dark:text-surface-0"
+                >Shift Time:</label
+              >
+              <div class="flex flex-col gap-2 w-48">
+                <p-datepicker
+                  formControlName="shiftTime"
+                  class="w-full"
+                  [timeOnly]="true"
+                  [inline]="true"
+                />
+                <small
+                  class="text-red-600"
+                  id="shiftDate"
+                  *ngIf="
+                    form.get('shiftTime')?.invalid &&
+                    form.get('shiftTime')?.touched
+                  "
+                  >{{ shiftTimeErrorMessage }}</small
+                >
+              </div>
+            </div>
+
+            <div class="flex gap-2 mx-auto my-6 items-center">
+              <p-button
+                size="large"
+                label="Submit"
+                [raised]="true"
+                severity="success"
+                [disabled]="form.invalid"
+                icon="pi pi-check"
+                type="submit"
+              >
+              </p-button>
+              <p-button
+                size="large"
+                label="Cancel"
+                (click)="onCancel()"
+                [raised]="true"
+                severity="danger"
+                icon="pi pi-times"
+                *ngIf="!loading"
+              />
+            </div>
+          </p-fluid>
+        </form>
+        <ng-template #spinner>
+          <div class="mx-auto w-fit">
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+          </div>
+        </ng-template>
+      </div>
+      <div
+        *ngIf="form.get('employeeID')?.value.length > 0"
+        class="w-full bg-surface-0 dark:bg-surface-900 py-10 px-8 sm:px-20"
+        style="border-radius: 53px"
+      >
+        <div class="font-semibold text-center pb-4 border-b">SHIFTS</div>
+        <div>
+          <p-table [value]="shifts" [scrollable]="true" scrollHeight="200px">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Shift ID</th>
+                <th>Shift Date</th>
+                <th>Shift Time</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-shift>
+              <tr>
+                <td>{{ shift.shiftID }}</td>
+                <td>{{ shift.shiftDate | date: "MMM d, y" }}</td>
+                <td>{{ shift.shiftTime }}</td>
+              </tr>
+            </ng-template>
+            <ng-template #emptymessage>
+              <tr>
+                <td colspan="8">No Shifts Found.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #successMessage>
+  <div class="mx-auto w-fit">
+    <div class="text-green-500 text-3xl font-medium mb-4">
+      Shift Request Raised !!
+    </div>
+  </div>
+</ng-template>

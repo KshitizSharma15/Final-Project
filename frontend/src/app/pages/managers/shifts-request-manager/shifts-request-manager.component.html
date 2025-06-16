@@ -1,0 +1,107 @@
+<div class="card">
+    <p-table
+        #dt
+        [value]="shifts"
+        [totalRecords]="shifts.length"
+        [(selection)]="selectedShifts"
+        dataKey="requestID"
+        [rowHover]="true"
+        [rows]="4"
+        [showCurrentPageReport]="true"
+        [loading]="loading"
+        [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [filterDelay]="0"
+        [globalFilterFields]="['requestID', 'employeeID', 'requestedShiftDate', 'requestedShiftTime', 'status']"
+        (onFilter)="dt.filterGlobal(searchValue, 'contains')"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between">
+                <p-button variant="outlined" icon="pi pi-filter-slash" label="Clear" (click)="clear()" />
+                <div class="class flex items-center gap-2">
+                    <p-iconField iconPosition="left">
+                        <p-inputIcon>
+                            <i class="pi pi-search"></i>
+                        </p-inputIcon>
+                    <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="searchValue"
+                        placeholder="Search by RequestID or EmployeeID"
+                        (input)="dt.filterGlobal(searchValue, 'contains')"
+                    />
+                </p-iconField>
+            </div>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="requestID" style="min-width: 10rem">
+                    <div class="flex justify-between items-center">
+                        Request ID
+                        <p-sortIcon field="requestID" />
+                        <p-columnFilter type="text" field="requestID" display="requestID" class="ml-auto" />
+                    </div>
+                </th>
+                <th pSortableColumn="employeeID" style="min-width: 10rem">
+                    <div class="flex justify-between items-center">
+                        Employee ID
+                        <p-sortIcon field="id" />
+                        <p-columnFilter type="text" field="id" display="menu" class="ml-auto" />
+                    </div>
+                </th>
+                <th pSortableColumn="requestedShiftDate" style="min-width: 10rem">
+                    <div class="flex justify-between items-center">
+                        Request Shift Date
+                        <p-sortIcon field="requestedShiftDate" />
+                        <p-columnFilter type="text" field="requestedShiftDate" display="menu" class="ml-auto" />
+                    </div>
+                </th>
+                <th pSortableColumn="requestedShiftTime" style="min-width: 10rem">
+                    <div class="flex justify-between items-center">
+                        Request Shift Time
+                        <p-sortIcon field="requestedShiftTime" />
+                        <p-columnFilter type="text" field="requestedShiftTime" display="menu" class="ml-auto" />
+                    </div>
+                </th>
+                <th style="width: 5rem">Status</th>
+                <th style="width: 5rem">Action</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-shift>
+            <tr class="p-selectable-row" style="cursor: pointer;">
+                <td>
+                    <div class="flex items-center justify-start gap-2">
+                        <div class="">
+                            <p>
+                                {{ shift.requestID }}
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td >
+                    {{ shift.employeeID }}
+                </td>
+                <td>{{ shift.requestedShiftDate | date }}</td>
+                <td>{{ shift.requestedShiftTime }}</td>
+                <td>
+                    <p-chip [label]="shift.status" />
+                </td>
+                <td *ngIf="shift.status==='Pending'" class="z-10 flex gap-2" (click)="$event.stopPropagation()">
+                    <button (click)="approveShiftRequest(shift.requestID)" class="text-primary-contrast bg-green-400 rounded-full w-6 h-6 flex items-center justify-center">
+                        <i class="pi pi-check"></i>
+                    </button>
+                    <button (click)="rejectShiftRequest(shift.requestID)" class="text-primary-contrast bg-red-500 rounded-full w-6 h-6 flex items-center justify-center">
+                        <i class="pi pi-times"></i>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+        <p-confirmdialog />
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="6">No shifts requests found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

@@ -1,0 +1,6 @@
+<p-fluid>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-manager-cards [title]="'Upcoming Shifts'" [caption]="'Upcoming shifts in next 24 hours.'" [data]="employeeWithShifts"></app-manager-cards>
+        <app-manager-cards [title]="'Recent Activity'" [caption]="'Latest Updates and notifications.'" [data]="todayClockInTimes"></app-manager-cards>
+    </div>
+</p-fluid>
