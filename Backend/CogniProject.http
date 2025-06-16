@@ -1,0 +1,6 @@
+@CogniProject_HostAddress = http://localhost:5167
+
+GET {{CogniProject_HostAddress}}/....../
+Accept: application/json
+
+###
